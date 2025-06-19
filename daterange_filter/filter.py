@@ -86,6 +86,12 @@ class DateRangeForm(DateRangeFilterBaseForm):
         field_name = kwargs.pop('field_name')
         super(DateRangeForm, self).__init__(*args, **kwargs)
 
+        if hasattr(self, 'data'):
+            self.data = self.data.copy()
+            for key, val in self.data.items():
+                if isinstance(val, list) and len(val) == 1:
+                    self.data[key] = val[0]
+
         self.fields['%s%s__gte' % (FILTER_PREFIX, field_name)] = forms.DateField(
             label='',
             widget=AdminDateWidget(
@@ -116,6 +122,12 @@ class DateTimeRangeForm(DateRangeFilterBaseForm):
     def __init__(self, *args, **kwargs):
         field_name = kwargs.pop('field_name')
         super(DateTimeRangeForm, self).__init__(*args, **kwargs)
+
+        if hasattr(self, 'data'):
+            self.data = self.data.copy()
+            for key, val in self.data.items():
+                if isinstance(val, list) and len(val) == 1:
+                    self.data[key] = val[0]
 
         self.fields['%s%s__gte' % (FILTER_PREFIX, field_name)] = forms.DateTimeField(
             label='',
